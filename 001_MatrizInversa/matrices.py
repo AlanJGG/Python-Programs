@@ -2,6 +2,7 @@ import numpy as np
 from fractions import Fraction
 
 def llenarMatriz(dim: int):
+    #Pide los datos para llenar una matriz y devolverla.
     mat = []
     for i in range(dim):
         row = []
@@ -12,6 +13,7 @@ def llenarMatriz(dim: int):
     return np.array(mat, dtype=float)
 
 def llenarMatrizIdentidad(dim: int):
+    #Devuelve una matriz identidad nxn.
     mat = []
     for i in range(dim):
         row = []
@@ -24,6 +26,7 @@ def llenarMatrizIdentidad(dim: int):
     return np.array(mat, dtype=float)
 
 def imprimirMatrices(mat, matIdentidad, dim: int):
+    #Imprime la matriz y matriz identidad.
     for i in range(dim):
         print('|', end=' ')
         for j in range(dim):
@@ -36,22 +39,23 @@ def imprimirMatrices(mat, matIdentidad, dim: int):
     print()
 
 def tieneInversa(matriz):
-    #Calcula el determinante de la matriz, si este es 0 no tiene inversa y devuelve False
+    #Calcula el determinante de la matriz, si este es 0 quiere decir que no tiene inversa y devuelve False.
     if np.linalg.det(matriz) == 0:
         return False
     else:
         return True
 
 def flotanteAFraccion(mat, dim):
-    matriz_fraccion = np.empty_like(mat, dtype=object)  # Matriz vacía para almacenar fracciones
+    #Devuelve una matriz de fracciones tras recibir una matriz de numeros flotantes o enteros.
+    matriz_fraccion = np.empty_like(mat, dtype=object)
     for i in range(dim):
         for j in range(dim):
-            matriz_fraccion[i][j] = Fraction(str(mat[i][j])).limit_denominator()  # Convertir a fracción y almacenar en la matriz
-    return matriz_fraccion  # Retornar la matriz convertida a fracciones
+            matriz_fraccion[i][j] = Fraction(str(mat[i][j])).limit_denominator()
+    return matriz_fraccion
 
 
 def gaussJordan(mat, matIdentidad, dim):
-    #Llevar a gauss
+    #Lleva la matriz a su forma gaussiana.
     for i in range(dim):
         aux = mat[i][i]
         for j in range(dim):
@@ -66,15 +70,16 @@ def gaussJordan(mat, matIdentidad, dim):
                     mat[k][j] = mat[k][j] - (mat[i][j] * factor)
                     matIdentidad[k][j] = matIdentidad[k][j] - (matIdentidad[i][j] * factor)
     
-    #Llevar a gauss jordan
+    #Lleva la matriz a gauss-jordan.
     for i in range(dim - 1, -1, -1):
         for k in range(i - 1, -1, -1):
-            factor = mat[k][i]  # Factor por el que se debe multiplicar la fila i
-            mult_factor = mat[i][i] * factor  # Multiplicación de la fila i por el factor
-            mult_factor_inv = matIdentidad[i][i] * factor  # Multiplicación de la fila i de la inversa por el factor
+            factor = mat[k][i]
+            mult_factor = mat[i][i] * factor 
+            mult_factor_inv = matIdentidad[i][i] * factor
+            #Vuelve ceros el triangulo superior de la matriz.
             for j in range(dim):
-                mat[k][j] = mat[k][j] - (mat[i][j] * factor)  # Resta de la fila k multiplicada por el factor
-                matIdentidad[k][j] = matIdentidad[k][j] - (matIdentidad[i][j] * factor)  # Resta de la fila k de la inversa multiplicada por el factor
+                mat[k][j] = mat[k][j] - (mat[i][j] * factor)
+                matIdentidad[k][j] = matIdentidad[k][j] - (matIdentidad[i][j] * factor) 
     
     mat.tolist()
     matIdentidad.tolist()
