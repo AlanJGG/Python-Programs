@@ -1,14 +1,14 @@
 import PyPDF2
 import tkinter as tk   
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 
 def extraer_texto(pdf_path):
     texto = ""
     with open(pdf_path, "rb") as archivo_pdf:
-        lector_pdf = PyPDF2.PdfFileReader(archivo_pdf)
-        num_paginas = lector_pdf.numPages
+        lector_pdf = PyPDF2.PdfReader(archivo_pdf)
+        num_paginas = len(lector_pdf.pages)
         for pagina in range(num_paginas):
-            texto += lector_pdf.getPage(pagina).extractText()
+            texto += lector_pdf.pages[pagina].extract_text()
     archivo_pdf.close()
     return texto
 
@@ -20,5 +20,5 @@ def pdf_a_txt():
         if ruta_guardado:
             with open(ruta_guardado, "w", encoding="utf-8") as archivo_txt:
                 archivo_txt.write(texto_extraido)
-            tk.messagebox.showinfo("Éxito", "El archivo se ha convertido a texto correctamente.")
-            archivo_txt.close()
+            
+            messagebox.showinfo("Éxito", "El archivo PDF se ha convertido a texto correctamente.")
